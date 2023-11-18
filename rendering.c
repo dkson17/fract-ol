@@ -12,6 +12,9 @@
 
 #include "fractol.h"
 
+/*Calculate the offset in bytes to the target pixel in the image buffer. 
+Set the color of the pixel at the calculated offset*/
+
 static void	my_pixel_put(int x, int y, t_img *img, int color)
 {
 	int	offset;
@@ -20,43 +23,48 @@ static void	my_pixel_put(int x, int y, t_img *img, int color)
 	*(unsigned int *)(img->pixels_ptr + offset) = color;
 }
 
-static void	mandel_vs_julia(t_complex *z, t_complex *c, t_fractal *fractal)
+static void	handle_pix_bonus(int x, int y, t_fractal *fractal)
 {
-	if (!ft_strncmp(fractal->name, "julia", 5))
+	int	b;
+	int	tr;
+	int	color;
+
+	color = 0;
+	if (fractal->name && !ft_strncmp(fractal->name, "burning_ship", 12))
 	{
-		c->x = fractal->julia_x;
-		c->y = fractal->julia_y;
+		b = burning_ship(fractal, x, y);
+		color = scaling(b, PASTEL_PINK, BLACK, fractal->iterations_definition);
 	}
-	else
+	else if (fractal->name && !ft_strncmp(fractal->name, "tricorn", 7))
 	{
-		c->x = z->x;
-		c->y = z->y;
+		tr = tricorn_set(fractal, x, y);
+		color = scaling(tr, LIME_SHOCK, PASTEL_PINK, \
+			fractal->iterations_definition);
 	}
+	my_pixel_put(x, y, &fractal->img, color);
 }
 
-static void	handle_pixel(int x, int y, t_fractal *fractal)
+void	handle_pixel(int x, int y, t_fractal *fractal)
 {
-	t_complex	z;
-	t_complex	c;
-	int			i;
-	int			color;
+	int	m;
+	int	j;
+	int	color;
 
-	i = 0;
-	z.x = (scaling(x, -2, +2, WIDTH) * fractal->zoom) + fractal->shift_x;
-	z.y = (scaling(y, +2, -2, HEIGHT) * fractal->zoom) + fractal->shift_y;
-	mandel_vs_julia(&z, &c, fractal);
-	while (i < fractal->iterations_definition)
+	color = 0;
+	if (fractal->name && !ft_strncmp(fractal->name, "mandelbrot", 10))
 	{
-		z = sum_complex(square_complex(z), c);
-		if ((z.x * z.x) + (z.y * z.y) > fractal->escape_value)
-		{
-			color = scaling(i, BLACK, RED, fractal->iterations_definition);
-			my_pixel_put(x, y, &fractal->img, color);
-			return ;
-		}
-		++i;
+		m = mandelbrot_set(fractal, x, y);
+		color = scaling(m, RED, BLACK, fractal->iterations_definition);
+		my_pixel_put(x, y, &fractal->img, color);
 	}
-	my_pixel_put(x, y, &fractal->img, HONEY);
+	else if (fractal->name && !ft_strncmp(fractal->name, "julia", 5))
+	{
+		j = julia_set(fractal, x, y);
+		color = scaling(j, BLUE, HOT_PINK, fractal->iterations_definition);
+		my_pixel_put(x, y, &fractal->img, color);
+	}
+	else
+		handle_pix_bonus(x, y, fractal);
 }
 
 void	fractal_render(t_fractal *fractal)

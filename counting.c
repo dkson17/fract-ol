@@ -31,10 +31,6 @@ t_complex	sum_complex(t_complex z1, t_complex z2)
 	return (result);
 }
 
-/* real = (x^2 - y^2)
- * i =  2*x*y
-*/
-
 t_complex	square_complex(t_complex z)
 {
 	t_complex	result;

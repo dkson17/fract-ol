@@ -13,14 +13,13 @@
 NAME	= fractol
 CC	= cc
 CFLAGS	= -Wextra -Wall -Werror
-SRC	= main.c fract_utils.c str_utils.c counting.c rendering.c hooks.c
+SRC	= main.c fract_utils.c str_utils.c counting.c rendering.c hooks.c fractal_sets.c
 OBJ	= $(addprefix obj/, $(SRC:.c=.o))
 
 all:	$(NAME)
 
 $(NAME): $(OBJ)
-		cd minilibx-linux && $(MAKE) all
-		$(CC) $(OBJ) -I include -Lminilibx-linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+		$(CC) $(OBJ) $(LFLAGS) -o $(NAME) -lmlx -lXext -lX11 -lm
 
 obj/%.o : %.c
 		mkdir -p obj
@@ -28,7 +27,6 @@ obj/%.o : %.c
 		
 clean:
 	rm -rf $(OBJ) obj
-	cd minilibx-linux && $(MAKE) clean
 
 fclean: clean
 	rm -rf $(NAME)

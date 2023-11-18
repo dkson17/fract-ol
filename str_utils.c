@@ -27,7 +27,11 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 void	ft_putstr(char *s)
 {
 	while (*s)
-		write(1, s++, 1);
+	{
+		if (write(1, s, 1) == -1)
+			exit(EXIT_FAILURE);
+		s++;
+	}
 }
 
 double	atodbl(char *s)
@@ -39,7 +43,7 @@ double	atodbl(char *s)
 
 	integer_part = 0;
 	fractional_part = 0;
-	sign = 1;
+	sign = +1;
 	pow = 1;
 	while (*s == 32 || (*s >= 9 && *s <= 13))
 		++s;
@@ -53,7 +57,7 @@ double	atodbl(char *s)
 	while (*s)
 	{
 		pow /= 10;
-		fractional_part = fractional_part * 10 + (*s++ - 48) * pow;
+		fractional_part = fractional_part + (*s++ - 48) * pow;
 	}
 	return ((integer_part + fractional_part) * sign);
 }
