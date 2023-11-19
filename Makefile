@@ -13,7 +13,7 @@
 NAME	= fractol
 CC	= cc
 CFLAGS	= -Wextra -Wall -Werror
-SRC	= main.c fract_utils.c str_utils.c counting.c rendering.c hooks.c fractal_sets.c
+SRC	= main.c fract_init.c str_utils.c counting.c rendering.c hooks.c fractal_sets.c
 OBJ	= $(addprefix obj/, $(SRC:.c=.o))
 
 all:	$(NAME)
