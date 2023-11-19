@@ -102,20 +102,3 @@ int	tricorn_set(t_fractal *fractal, double x, double y)
 	}
 	return (n);
 }
-/*if (fractal->julia_x_given)
-		c.x = fractal->julia_x;
-	else
-		c.x = -0.7;
-	if (fractal->julia_y_given)
-		c.y = fractal->julia_y;
-	else
-		c.y = 0.27015;
-	n = 0;
-	while (n < fractal->iterations_definition)
-	{
-		z = sum_complex(square_complex(z), c);
-		if (z.x * z.x + z.y * z.y > fractal->escape_value)
-			break ;
-		n++;
-	}
-	return (n);*/
